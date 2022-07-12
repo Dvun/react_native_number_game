@@ -1,5 +1,5 @@
 import React, { FC, ReactNode } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Dimensions, StyleSheet, View } from 'react-native';
 import { Colors } from '../../constants/colors';
 
 
@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 16,
-    marginTop: 36,
+    marginTop: Dimensions.get('window').width < 380 ? 18 : 36,
     marginHorizontal: 24,
     borderRadius: 8,
     backgroundColor: Colors.primary800,

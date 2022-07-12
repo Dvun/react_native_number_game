@@ -3,7 +3,7 @@ import StartGameScreen from './screens/StartGameScreen';
 import { LinearGradient } from 'expo-linear-gradient';
 import { StatusBar } from 'expo-status-bar';
 import { useState } from 'react';
-import GameScreen from './screens/GameScreen';
+import GameScreen from './screens/gameScreen/GameScreen';
 import { Colors } from './constants/colors';
 import GameOverScreen from './screens/GameOverScreen';
 import AppLoading from 'expo-app-loading';

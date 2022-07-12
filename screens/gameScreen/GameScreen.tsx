@@ -1,13 +1,10 @@
 import React, { FC, useEffect, useState } from 'react';
-import { Alert, StyleSheet, View, FlatList } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import Title from '../components/ui/Title';
-import { generateRandomBetween } from '../utils/generateRandomBetween';
-import NumberContainer from '../components/game/NumberContainer';
-import PrimaryButton from '../components/ui/PrimaryButton';
-import Card from '../components/ui/Card';
-import InstructionText from '../components/ui/InstructionText';
-import GuessLogItem from '../components/game/GuessLogItem';
+import { Alert, FlatList, StyleSheet, useWindowDimensions, View } from 'react-native';
+import Title from '../../components/ui/Title';
+import { generateRandomBetween } from '../../utils/generateRandomBetween';
+import GuessLogItem from '../../components/game/GuessLogItem';
+import PortraitGameScreen from './PortraitGameScreen';
+import LandscapeGameScreen from './LandscapeGameScreen';
 
 
 interface Props {
@@ -22,6 +19,7 @@ const GameScreen: FC<Props> = ({userNumber, setGameIsOver, setRoundsNumber}) => 
   const initialGuess = generateRandomBetween(1, 100, userNumber)
   const [currentGuess, setCurrentGuess] = useState<number>(initialGuess)
   const [guessRounds, setGuessRounds] = useState([initialGuess])
+  const {width} = useWindowDimensions()
 
   useEffect(() => {
     if (currentGuess === userNumber) {
@@ -53,23 +51,13 @@ const GameScreen: FC<Props> = ({userNumber, setGameIsOver, setRoundsNumber}) => 
   return (
     <View style={styles.screen}>
       <Title>Opponent's Guess</Title>
-      <NumberContainer>{currentGuess}</NumberContainer>
-      <Card>
-        <InstructionText style={styles.instructionText}>Higher or lower?</InstructionText>
-        <View style={styles.buttonsContainer}>
-          <View style={styles.buttonContainer}>
-            <PrimaryButton onPress={() => nextGuessHandler('greater')}>
-              <Ionicons name='md-add' size={24}/>
-            </PrimaryButton>
-          </View>
-          <View style={styles.buttonContainer}>
-            <PrimaryButton onPress={() => nextGuessHandler('lower')}>
-              <Ionicons name='md-remove' size={24}/>
-            </PrimaryButton>
-          </View>
-        </View>
-      </Card>
-      <View style={styles.listContainer}>
+      {
+        width > 500 ?
+          <LandscapeGameScreen  currentGuess={currentGuess} nextGuessHandler={nextGuessHandler}/>
+          :
+          <PortraitGameScreen currentGuess={currentGuess} nextGuessHandler={nextGuessHandler}/>
+      }
+      <View style={[styles.listContainer, width > 500 && styles.listContainerLandscape]}>
         <FlatList
           data={guessRounds}
           keyExtractor={(item, index) => index.toString()}
@@ -90,18 +78,12 @@ const styles = StyleSheet.create({
     padding: 24,
     alignItems: 'center'
   },
-  buttonsContainer: {
-    marginTop: 10,
-    flexDirection: 'row',
-  },
-  buttonContainer: {
-    flex: 1
-  },
-  instructionText: {
-    marginBottom: 12
-  },
   listContainer: {
     flex: 1,
     padding: 16
+  },
+  listContainerLandscape: {
+    flex: 1,
+    padding: 0
   }
 })

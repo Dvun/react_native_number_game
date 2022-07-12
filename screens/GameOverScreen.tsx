@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Image, StyleSheet, Text, View } from 'react-native';
+import { Dimensions, Image, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 import Title from '../components/ui/Title';
 import { Colors } from '../constants/colors';
 import PrimaryButton from '../components/ui/PrimaryButton';
@@ -12,11 +12,27 @@ interface Props {
 }
 
 const GameOverScreen: FC<Props> = ({roundsNumber, userNumber, onStartNewGame}) => {
+  const {height, width} = useWindowDimensions()
+  let imageSize = 300
+
+  if (width < 380) {
+    imageSize = 150
+  }
+
+  if (height < 400) {
+    imageSize = 90
+  }
+
+  const imageStyle = {
+    width: imageSize,
+    height: imageSize,
+    borderRadius: imageSize / 2
+  }
 
   return (
     <View style={styles.container}>
       <Title>GAME OVER</Title>
-      <View style={styles.imageContainer}>
+      <View style={[styles.imageContainer, imageStyle]}>
         <Image style={styles.image} source={require('../assets/images/success.png')}/>
       </View>
       <Text style={styles.summaryText}>
@@ -30,17 +46,17 @@ const GameOverScreen: FC<Props> = ({roundsNumber, userNumber, onStartNewGame}) =
 
 export default GameOverScreen;
 
+const dimensionWidth = Dimensions.get('window').width
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 24,
     justifyContent: 'center',
     alignItems: 'center',
+    marginTop: dimensionWidth < 380 ? 30 : 40
   },
   imageContainer: {
-    width: 300,
-    height: 300,
-    borderRadius: 200,
     borderWidth: 3,
     borderColor: Colors.primary800,
     overflow: 'hidden',
